@@ -3,14 +3,11 @@ import axios from "axios";
 import AgoraUIKit from "agora-react-uikit";
 import { useEffect, useState } from 'react';
 import authHeader from '../services/auth-header';
-import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
-import Prescription from './prescription.component'
+import Prescription from "./prescription.component"
 window.Buffer = window.Buffer || require("buffer").Buffer;
 const {RtcTokenBuilder, RtcRole} = require('agora-access-token');
 
-// const currentUser = authService.getCurrentUser;
-// console.log(currentUser)
 const urlBase = "http://localhost:8080/api/v1";
 
 function VideoCall() {
@@ -18,16 +15,18 @@ function VideoCall() {
   const [tokenA, setTokenA] = useState(0);
   const [doctor, setDoctor] = useState([]);
   const [channelName, setChannelName] = useState("");
+  const [userId, setUserId] = useState(0);
   
     const user = AuthService.getCurrentUser();
     console.log(user.id);
   
   const config = {
-    headers: authHeader()
+  headers: authHeader()
   };
   const appId = '5e2ee6c6fc13459caa99cb8c234d42e0';
   const appCertificate = '6529c2900f7442b89b7b46666fdca9de';
-  let channelId = '';
+  var channelId = "";
+  var uid= 0;
   const role = RtcRole.PUBLISHER;
   const expirationTimeInSeconds = 3600;
   const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -36,7 +35,8 @@ function VideoCall() {
 const rtcProps = {
     appId : "5e2ee6c6fc13459caa99cb8c234d42e0", 
     channel : "",
-    token : ""
+    token : "",
+    uid:0
 };
 
 const getDoctor = (setDoctor) => {
@@ -69,32 +69,35 @@ window.onload = () => {
     getDoctor(setDoctor);
     }
 
-useEffect(() => { 
-    rtcProps["channel"] = channelName;
-    rtcProps["token"] = tokenA;
-  });
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
-    channelId = channelName;
-    console.log(channelId)
-    let tok = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelId, "", role, privilegeExpiredTs);
-    setTokenA(tok);
-    doctor.channel_name = tok;
-    setDoctor(doctor);
-    updateDoctor(setDoctor);
-    console.log("lol")
-    setVideoCall(true);    
-};
+  useEffect(() => { 
+      rtcProps["channel"] = channelName;
+      rtcProps["token"] = tokenA;
+      rtcProps["uid"] = userId;
+    });
 
 const handle = (event) => {
-    var strng = doctor.id+doctor.fname;
-    setChannelName(strng);
+      var strng = doctor.userName + doctor.id;
+      setUserId(doctor.id);
+      setChannelName(strng);
+};
+
+const handleSubmit = (event) => {
+    event.preventDefault();
+    channelId = channelName;
+    uid = userId;
+    let tok = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelId, uid, role, privilegeExpiredTs);
+    setTokenA(tok);
+    doctor.token = tok;
+    doctor.channel_name = String(doctor.userName);
+    setDoctor(doctor);
+    updateDoctor(setDoctor);
+    setVideoCall(true);    
 };
 
 const callbacks = {
   EndCall: () => {
     doctor.channel_name = null;
+    doctor.token = null;
     setDoctor(doctor);
     updateDoctor(setDoctor);
     setVideoCall(false);
@@ -112,7 +115,6 @@ return videoCall ? (
   <br></br>
   <Prescription></Prescription>
   </div>
-
 ) : (
     <form onSubmit={handleSubmit}>
     <button type="submit" onClick={handle}>Join</button>
