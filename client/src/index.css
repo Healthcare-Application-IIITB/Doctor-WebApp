@@ -7,7 +7,209 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+
+
+.tile {
+  width:190px;
+  height:170px;
+  border-radius:4px;
+  box-shadow: 4px 4px 6px 0 rgba(0,0,0,0.15);
+  margin-top:30px;
+  margin-left:55px;
+}
+
+.tile .header .count {
+  font-size: 30px;
+  text-align:center;
+  padding:40px 0 0;
+}
+
+.tile .body .title {
+    text-align:center;
+    font-size:20px;
+    margin-top: 20px;
+}
+
+.tile.job .header {
+  background: white;
+  color: #5e17eb;
+  font-weight: bolder;
+}
+
+.tile.job  .body {
+  color:#5e17eb;
+  font-weight: bold;
+}
+
+.tile.resource .header {
+  background: linear-gradient(to bottom right, #ef7f00, #f7b200);
+}
+
+.tile.resource  .body {
+  color: #ef7f00;
+}
+
+.tile.quote .header {
+  background: linear-gradient(to bottom right, #1f6abb, #4f9cf2);
+}
+
+.tile.quote  .body {
+  color: #5e17eb
+}
+
+.tile.invoice .header {
+  background: white;
+}
+
+.tile.invoice  .body {
+  color:#5e17eb
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.notification {
+  color: black;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.success {
+  background: rgb(5, 99, 78);
+}
+
+.error {
+  background: rgb(158, 25, 25);
+}
+
+.regular-shadow {
+	-webkit-box-shadow: -1px 5px 5px 0px #111;
+	box-shadow: -1px 5px 5px 0px #111;
+}
+
+.regular-text-shadow {
+	text-shadow: 1px 1px 0 rgb(93, 95, 97);
+}
+
+.no-border {
+  border: 0;
+  box-shadow: none;
+}
+
+
+#toast {
+  visibility: hidden;
+  max-width: fit-content;
+  height: 50px;
+  /*margin-left: -125px;*/
+  margin: auto;
+  /*background-color: rgb(5, 99, 78);*/
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+
+  position: fixed;
+  z-index: 1;
+  left: 0;right:0;
+  bottom: 35px;
+  font-size: 17px;
+  white-space: nowrap;
+}
+#toast #img{
+width: 50px;
+height: 50px;
+  
+  float: left;
+  
+  padding-top: 16px;
+  padding-bottom: 16px;
+  
+  box-sizing: border-box;
+
+  
+  background-color: #111;
+}
+#toast #desc{
+
+  
+  color: #fff;
+  
+  padding: 12px;
+  
+  overflow: hidden;
+white-space: nowrap;
+}
+
+#toast.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes expand {
+  from {min-width: 50px} 
+  to {min-width: 350px}
+}
+
+@keyframes expand {
+  from {min-width: 50px}
+  to {min-width: 350px}
+}
+@-webkit-keyframes stay {
+  from {min-width: 350px} 
+  to {min-width: 350px}
+}
+
+@keyframes stay {
+  from {min-width: 350px}
+  to {min-width: 350px}
+}
+@-webkit-keyframes shrink {
+  from {min-width: 350px;} 
+  to {min-width: 50px;}
+}
+
+@keyframes shrink {
+  from {min-width: 350px;} 
+  to {min-width: 50px;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 60px; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 60px; opacity: 0;}
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #5e17eb; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../services/auth.service";
+import Notification from "./notification-component";
 
 import { withRouter } from "../common/with-router";
 
@@ -16,6 +17,9 @@ class Login extends Component {
       password: "",
       loading: false,
       message: "",
+      notification:"abc",
+      notificationType:"abc",
+      notify: true,
     };
   }
 
@@ -31,6 +35,22 @@ class Login extends Component {
     });
   }
 
+  notificationHandler (message, type){
+    this.setState({
+      notification:message,
+      notificationType:type,
+      notify:true,
+    });
+    setTimeout(() => {
+      this.setState({
+        notification:null,
+        notificationType:null,
+        notify:false
+      })
+    }, 2500)
+  }
+
+
   handleLogin(e) {
     e.preventDefault();
 
@@ -40,7 +60,8 @@ class Login extends Component {
     });
     AuthService.login(this.state.username, this.state.password).then(
       () => {
-        this.props.router.navigate("/profile");
+        this.props.router.navigate("/dashboard");
+        this.notificationHandler(`Logged In Successfully.`, 'success')
         window.location.reload();
       },
       (error) => {
@@ -55,6 +76,8 @@ class Login extends Component {
           loading: false,
           message: resMessage,
         });
+        console.log(error.response.data.message)
+        this.notificationHandler(`Login Failed | Check Username and Password !`, 'error')
       }
     );
   }
@@ -62,16 +85,17 @@ class Login extends Component {
   render() {
     return (
       <div className="Auth-form-container">
+      <Notification notify={this.state.notify} notification={this.state.notification} type={this.state.notificationType} />
       <form className="Auth-form">
-        <div
+        {this.state.loading ? <div class="loader" style={{marginLeft:"45%", marginTop:"10%"}}></div>:<div
           className="Auth-form-content"
           style={{ color: "darkblue", paddingLeft: "50px" }}
         >
           <h3
             style={{
-              paddingLeft: "35px",
-              color: "rgb(38, 201, 225)",
-              fontWeight: "bold",
+              textAlign:"center",
+              color: "#5e17eb",
+              fontWeight: "bolder",
             }}
           >
             DOCTOR LOGIN
@@ -100,7 +124,7 @@ class Login extends Component {
           <div className="d-grid mt-5">
             <button
               style={{
-                backgroundColor: "rgb(38, 201, 225)",
+                backgroundColor: "#5e17eb",
                 fontWeight: "bold",
               }}
               type="Submit"
@@ -110,7 +134,7 @@ class Login extends Component {
               SUBMIT
             </button>
           </div>
-        </div>
+        </div>}
       </form>
     </div>
 
